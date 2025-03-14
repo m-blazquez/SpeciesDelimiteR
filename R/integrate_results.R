@@ -18,12 +18,12 @@ integrate_results <- function(...) {
 
   }
 
-  # Make sure that all dataframes have two columns and that the first column is called "Specimen"
+  # Check if all dataframes have exactly two columns and the first column is "Specimen"
   for (i in seq_along(dfs)) {
 
     if (ncol(dfs[[i]]) != 2) {
 
-      stop(paste("Error: Dataframe", i, "does not have two columns"))
+      stop(paste("Error: Dataframe", i, "does not have exactly two columns"))
 
     }
 
@@ -32,15 +32,21 @@ integrate_results <- function(...) {
       stop(paste("Error: The first column of dataframe", i, "is not named 'Specimen'"))
 
     }
+  }
+
+  # Normalize Specimen column: convert to character and trim whitespace
+  for (i in seq_along(dfs)) {
+
+    dfs[[i]]$Specimen <- trimws(as.character(dfs[[i]]$Specimen))
 
   }
 
-  # Extract specimen columns and check if they contain the same values (regardless of order)
-  specimen_sets <- lapply(dfs, function(df) sort(as.character(df$Specimen)))
+  # Extract specimen columns and check if they contain the same values (ignoring order)
+  specimen_sets <- lapply(dfs, function(df) sort(df$Specimen))
 
   if (!all(sapply(specimen_sets, function(x) identical(x, specimen_sets[[1]])))) {
 
-    stop("Error: Specimen columns do not match across all dataframes")
+    stop("Error: Specimen columns do not match across all dataframes (check for data type mismatches, extra spaces, or missing values)")
 
   }
 
@@ -53,7 +59,7 @@ integrate_results <- function(...) {
 
   }
 
-  # Convert all columns except "Specimen" to factors (as they signify putative species and not numeric traits)
+  # Convert all columns except "Specimen" to factors
   for (col in names(merged_df)[-1]) {
 
     merged_df[[col]] <- as.factor(merged_df[[col]])
