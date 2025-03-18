@@ -95,7 +95,7 @@ prepare_ASAP_input <- function(DNA_alignment, outgroup = NULL) {
   cat(" - Identify the partition with the lowest ASAP score.\n")
   cat(" - Download the partition file as CSV under the 'Text' option.\n")
   cat(" - Save the CSV file to: ", getwd(), "/ASAP.\n")
-  cat(" - Save the entire webpage for future reference.\n")
+  cat(" - Save the entire webpage for future reference. \n")
   cat("\n")
 
 }
