@@ -17,14 +17,19 @@ parse_GMYC <- function(GMYC_output, method = NULL) {
     # Change column names
     colnames(parsed_file) <- c("Specimen", "GMYCs_species")
 
+    # Ensure the directory exists before writing the file
+    if (!dir.exists("GMYC/Single")) {
+      dir.create("GMYC/Single", recursive = TRUE)
+    }
+
     # Write new file
     write.table(parsed_file,
-                file = "GMYCs_parsed_output.txt",
+                file = "GMYC/Single/GMYCs_parsed_output.txt",
                 sep = "\t",
                 row.names = FALSE)
 
     # Tell the user where the new file is
-    message(paste0("The file 'GMYCs_parsed_output.txt' has been created at '", getwd(), "'"))
+    message(paste0("The file 'GMYCs_parsed_output.txt' has been created at '", getwd(), "/GMYC/Single'"))
 
     # Return the dataframe
     return(parsed_file)
@@ -39,14 +44,19 @@ parse_GMYC <- function(GMYC_output, method = NULL) {
     # Change column names
     colnames(parsed_file) <- c("Specimen", "GMYCm_species")
 
+    # Ensure the directory exists before writing the file
+    if (!dir.exists("GMYC/Multiple")) {
+      dir.create("GMYC/Multiple", recursive = TRUE)
+    }
+
     # Write new file
     write.table(parsed_file,
-                file = "GMYCm_parsed_output.txt",
+                file = "GMYC/Multiple/GMYCm_parsed_output.txt",
                 sep = "\t",
                 row.names = FALSE)
 
     # Tell the user where the new file is
-    message(paste0("The file 'GMYCm_parsed_output.txt' has been created at '", getwd(), "'"))
+    message(paste0("The file 'GMYCm_parsed_output.txt' has been created at '", getwd(), "/GMYC/Multiple'"))
 
     # Return the dataframe
     return(parsed_file)
