@@ -36,15 +36,20 @@ parse_bPTP <- function(bPTP_output_filename) {
   # Combine all data frames
   bPTP <- do.call(rbind, species_list)
 
+  # Ensure the directory exists before writing the file
+  if (!dir.exists("bPTP")) {
+    dir.create("bPTP", recursive = TRUE)
+  }
+
   # Write new file
   write.table(bPTP,
-              file = "bPTP_parsed_output.txt",
+              file = "bPTP/bPTP_parsed_output.txt",
               sep = "\t",
               row.names = FALSE,
               quote = FALSE)  # Avoid unnecessary quotes around specimen names
 
   # Tell the user where the new file is
-  message(paste0("The file 'bPTP_parsed_output.txt' has been created at '", getwd(), "'"))
+  message(paste0("The file 'bPTP_parsed_output.txt' has been created at '", getwd(), "/bPTP'"))
 
   # Return the dataframe
   return(bPTP)
