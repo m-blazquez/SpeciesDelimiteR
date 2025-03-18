@@ -23,6 +23,33 @@ prepare_ASAP_input <- function(DNA_alignment, outgroup = NULL) {
     message("No outgroup provided or outgroup vector is empty. Proceeding with the full alignment.")
   }
 
+  # Ensure all sequences have the same length
+  seq_lengths <- sapply(DNA_alignment, nchar)
+  if (length(unique(seq_lengths)) > 1) {
+    stop("ERROR: Sequences have different lengths. Ensure they are properly aligned.")
+  }
+
+  # Check for empty sequences
+  empty_seqs <- names(DNA_alignment)[seq_lengths == 0]
+  if (length(empty_seqs) > 0) {
+    stop(paste("ERROR: The following sequences are empty:", paste(empty_seqs, collapse = ", ")))
+  }
+
+  # Define valid nucleotide characters (IUPAC codes + standard bases + gap)
+  valid_chars <- c("A", "T", "G", "C", "-", "Y", "R", "W", "S", "M", "D", "V", "H", "N")
+
+  # Check for invalid characters in the alignment (case-insensitive)
+  invalid_seqs <- sapply(DNA_alignment, function(seq) {
+    seq_upper <- toupper(seq)  # Convert sequence to uppercase
+    any(!strsplit(seq_upper, "")[[1]] %in% valid_chars)
+  })
+
+  # Stop execution if any sequence contains unexpected characters
+  if (any(invalid_seqs)) {
+    stop(paste("ERROR: The following sequences contain invalid characters:",
+               paste(names(DNA_alignment)[invalid_seqs], collapse = ", ")))
+  }
+
   # Rename remaining sequences by adding "DNA_" as a prefix (if they are only numbers ASAP does not run)
   new_names <- paste0("DNA_", names(DNA_alignment))
   names(DNA_alignment) <- new_names
@@ -75,27 +102,52 @@ prepare_ASAP_input <- function(DNA_alignment, outgroup = NULL) {
     }
   }
 
-  # Calculate Ti/Tv ratio
-  TiTv_ratio <- transitions / transversions
+  # Calculate Ti/Tv ratio, avoiding division by zero
+  if (transversions == 0) {
+    TiTv_ratio <- NA
+    warning("WARNING: No transversions found, Ti/Tv ratio is undefined.")
+  } else {
+    TiTv_ratio <- transitions / transversions
+  }
 
-  # Output the Ti/Tv ratio
-  cat("\n")
-  cat("Transition/Transversion ratio:", TiTv_ratio, "\n")
-  cat("\n")
-  cat("To run ASAP:\n")
-  cat("\n")
-  cat(" - Visit the ASAP online tool at https://bioinfo.mnhn.fr/abi/public/asap/\n")
-  cat(" - Upload the 'input_alignment.fasta' file.\n")
-  cat(" - Choose the Kimura (K80) model for distance computation.\n")
-  cat(" - Enter the ts/tv ratio: ", TiTv_ratio, "\n")
-  cat(" - Click 'Go' to start the analysis.\n")
-  cat("\n")
-  cat("After the analysis:\n")
-  cat("\n")
-  cat(" - Identify the partition with the lowest ASAP score.\n")
-  cat(" - Download the partition file as CSV under the 'Text' option.\n")
-  cat(" - Save the CSV file to: ", getwd(), "/ASAP.\n")
-  cat(" - Save the entire webpage for future reference. \n")
-  cat("\n")
+  # Give further instructions
+  message("All check have been passed. ASAP shold run with no issue.")
+
+  if (transversions == 0) {
+    cat("\n")
+    cat("To run ASAP:\n")
+    cat("\n")
+    cat(" - Visit the ASAP online tool at https://bioinfo.mnhn.fr/abi/public/asap/\n")
+    cat(" - Upload the 'input_alignment.fasta' file.\n")
+    cat(" - Choose the Jukes-Cantor(JC69) model for distance computation.\n")
+    cat(" - Click 'Go' to start the analysis.\n")
+    cat("\n")
+    cat("After the analysis:\n")
+    cat("\n")
+    cat(" - Identify the partition with the lowest ASAP score.\n")
+    cat(" - Download the partition file as CSV under the 'Text' option.\n")
+    cat(" - Save the CSV file to: ", getwd(), "/ASAP.\n")
+    cat(" - Save the entire webpage for future reference. \n")
+    cat("\n")
+  } else {
+    cat("\n")
+    cat("To run ASAP:\n")
+    cat("\n")
+    cat(" - Visit the ASAP online tool at https://bioinfo.mnhn.fr/abi/public/asap/\n")
+    cat(" - Upload the 'input_alignment.fasta' file.\n")
+    cat(" - Choose the Kimura (K80) model for distance computation.\n")
+    cat(" - Enter the ts/tv ratio: ", TiTv_ratio, "\n")
+    cat(" - Click 'Go' to start the analysis.\n")
+    cat("\n")
+    cat("After the analysis:\n")
+    cat("\n")
+    cat(" - Identify the partition with the lowest ASAP score.\n")
+    cat(" - Download the partition file as CSV under the 'Text' option.\n")
+    cat(" - Save the CSV file to: ", getwd(), "/ASAP.\n")
+    cat(" - Save the entire webpage for future reference. \n")
+    cat("\n")
+  }
+
+
 
 }
