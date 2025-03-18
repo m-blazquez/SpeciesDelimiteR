@@ -35,7 +35,7 @@ run_GMYC <- function(phylogeny, outgroup = NULL, method = NULL) {
 
     message("No outgroup provided or outgroup vector is empty. Proceeding with the full tree.")
 
-    }
+  }
 
   # Runs GMYC using the splits package, using the single- or multiple- threshold options.
   if(method == "single") {
@@ -80,4 +80,3 @@ run_GMYC <- function(phylogeny, outgroup = NULL, method = NULL) {
   }
 
 }
-
