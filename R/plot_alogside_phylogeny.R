@@ -80,7 +80,7 @@ plot_alongside_phylogeny <- function(integrated_results, phylogeny, outgroup = N
       }
     }
   } else {
-    warning("No node labels detected. Support values will not be displayed on the tree.")
+    warning("No node labels detected. Support values will not be displayed on the tree. If your phylogeny was constructed in BEAST and read using read.nexus, try using read.BEAST instead. This may preserve node labels correctly.")
   }
 
   # Draw dotted lines and tip labels
