@@ -8,15 +8,11 @@
 ![Pre-release](https://img.shields.io/badge/pre--release-v0.1-orange.svg)
 <!-- badges: end -->
 
-<div style="display: flex; justify-content: space-between; align-items: center;">
+<img src="man/figures/logo.png" width="140" align="right"/>
 
-<span style="flex: 1; max-width: 80%;"> *SpeciesDelimiteR* is an R
-package designed to streamline species delimitation analyses. The
-package provides a toolkit for taxonomists to make informed decisions
-about species boundaries. </span>
-<img src="man/figures/logo.png" alt="SpeciesDelimiteR Logo" width="200">
-
-</div>
+*SpeciesDelimiteR* is an R package designed to streamline species
+delimitation analyses. The package provides a toolkit for taxonomists to
+make informed decisions about species boundaries.
 
 ## Features
 
