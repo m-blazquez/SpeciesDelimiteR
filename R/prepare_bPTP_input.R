@@ -1,4 +1,23 @@
 
+#' prepare_bPTP_input
+#'
+#' @description
+#' This function processes a non-ultrametric tree and performs several checks to ensure its suitability for Bayesian Poisson Tree Processes (bPTP) analysis.
+#' Specifically, it verifies that the input is a valid phylogenetic tree, ensures there are no duplicated tip labels, confirms that the tree has at least three tips, removes any outgroup sequences, checks for negative branch lengths, verifies that the tree is not ultrametric and untroots the tree if it is rooted.
+#' Once all checks are successfully passed, the function creates a new directory named "bPTP" and saves the tree as "input_tree.newick" within it.
+#' Finally, the function provides the user with instructions on how to run the analysis using the bPTP online tool, including guidance on which files to save and where to store them.
+#' If the tree is large (>500 specimens), the function warns the user that bPTP may take a long time to run.
+#'
+#' @param phylogeny A non-ultrametric phylogenetic tree, as an object of class "phylo" read using ape::read.tree.
+#' @param outgroup A string vector containing the name of the outgroup sequences, if they were included in the phylogenetic tree.
+#'
+#' @returns None. The function creates a newick file ("input_tree.newick") in the "bPTP" directory.
+#' @export
+#'
+#' @examples
+#' tree <- read.tree("iqtree.newick")
+#' prepare_bPTP_input(phylogeny = tree, outgroup = c("outgroup_specimen_1", "outgroup_specimen_2", "outgroup_specimen_3"))
+#'
 prepare_bPTP_input <- function(phylogeny, outgroup = NULL) {
 
   # Make sure that the input is a valid phylogenetic tree
@@ -58,9 +77,9 @@ prepare_bPTP_input <- function(phylogeny, outgroup = NULL) {
 
   # Warn if the tree is too large
   if (length(phylogeny$tip.label) > 500) {
-    message("WARNING: The tree contains more than 500 taxa. bPTP may take a long time.")
+    message("WARNING: The tree contains more than 500 taxa. bPTP may take a considerable amount of time to run with a tree this large..")
   }  else {
-    message("All check have been passed. bPTP shold run with no issue.")
+    message("All checks have been passed. bPTP should run with no issue.")
   }
 
   # Give further instructions

@@ -1,4 +1,22 @@
 
+#' prepare_ASAP_input
+#'
+#' @description
+#' This function processes a DNA alignment to prepare it as input for ASAP (Assemble Species by Automatic Partitioning).
+#' It performs several checks to ensure the data is suitable for analysis: (1) verifies that the input is a valid DNA alignment, (2) removes outgroup sequences that could bias the ASAP analysis, (3) checks that all sequences have the same length, (4) identifies any empty sequences and (5) detects invalid characters in the sequences.
+#' Once these checks are successfully passed, the function creates a new "ASAP" directory and saves the alignment as "input_alignment.fasta" within it.
+#' The function then calculates the transition/transversion (ts/tv) ratio required to run ASAP using the Kimura (K80) model to compute distances, which we recommend as the default method. Finally, the function directs the user to the ASAP online tool, providing concise instructions on how to run the analysis, what files to save and where to save them.
+#'
+#' @param DNA_alignment A DNA alignment read using seqinr::read.fasta.
+#' @param outgroup A string vector containing the name of the outgroup sequences, if they were included in the alignment.
+#'
+#' @returns None. The function creates a fasta file ("input_alignment.fasta") in the "ASAP" directory.
+#' @export
+#'
+#' @examples
+#' alignment <- seqinr:read.fasta("DNA_alignment.fasta", seqtype = "DNA", as.string = TRUE)
+#' prepare_ASAP_input(DNA_alignment = alignment, outgroup = c("outgroup_specimen_1", "outgroup_specimen_2", "outgroup_specimen_3"))
+#'
 prepare_ASAP_input <- function(DNA_alignment, outgroup = NULL) {
 
   # Check if DNA_alignment is a list (as read by read.fasta)
@@ -105,49 +123,29 @@ prepare_ASAP_input <- function(DNA_alignment, outgroup = NULL) {
   # Calculate Ti/Tv ratio, avoiding division by zero
   if (transversions == 0) {
     TiTv_ratio <- NA
-    warning("WARNING: No transversions found, Ti/Tv ratio is undefined.")
+    warning("WARNING: No transversions found, Ts/Tv ratio is undefined.")
   } else {
     TiTv_ratio <- transitions / transversions
   }
 
   # Give further instructions
-  message("All check have been passed. ASAP shold run with no issue.")
+  message("All checks have been passed. ASAP should run with no issue.")
 
-  if (transversions == 0) {
-    cat("\n")
-    cat("To run ASAP:\n")
-    cat("\n")
-    cat(" - Visit the ASAP online tool at https://bioinfo.mnhn.fr/abi/public/asap/\n")
-    cat(" - Upload the 'input_alignment.fasta' file.\n")
-    cat(" - Choose the Jukes-Cantor(JC69) model for distance computation.\n")
-    cat(" - Click 'Go' to start the analysis.\n")
-    cat("\n")
-    cat("After the analysis:\n")
-    cat("\n")
-    cat(" - Identify the partition with the lowest ASAP score.\n")
-    cat(" - Download the partition file as CSV under the 'Text' option.\n")
-    cat(" - Save the CSV file to: ", getwd(), "/ASAP.\n")
-    cat(" - Save the entire webpage for future reference. \n")
-    cat("\n")
-  } else {
-    cat("\n")
-    cat("To run ASAP:\n")
-    cat("\n")
-    cat(" - Visit the ASAP online tool at https://bioinfo.mnhn.fr/abi/public/asap/\n")
-    cat(" - Upload the 'input_alignment.fasta' file.\n")
-    cat(" - Choose the Kimura (K80) model for distance computation.\n")
-    cat(" - Enter the ts/tv ratio: ", TiTv_ratio, "\n")
-    cat(" - Click 'Go' to start the analysis.\n")
-    cat("\n")
-    cat("After the analysis:\n")
-    cat("\n")
-    cat(" - Identify the partition with the lowest ASAP score.\n")
-    cat(" - Download the partition file as CSV under the 'Text' option.\n")
-    cat(" - Save the CSV file to: ", getwd(), "/ASAP.\n")
-    cat(" - Save the entire webpage for future reference. \n")
-    cat("\n")
-  }
-
-
+  cat("\n")
+  cat("To run ASAP:\n")
+  cat("\n")
+  cat(" - Visit the ASAP online tool at https://bioinfo.mnhn.fr/abi/public/asap/\n")
+  cat(" - Upload the 'input_alignment.fasta' file.\n")
+  cat(" - Choose the Kimura (K80) model for distance computation.\n")
+  cat(" - Enter the ts/tv ratio: ", TiTv_ratio, "\n")
+  cat(" - Click 'Go' to start the analysis.\n")
+  cat("\n")
+  cat("After the analysis:\n")
+  cat("\n")
+  cat(" - Identify the partition with the lowest ASAP score.\n")
+  cat(" - Download the partition file as CSV under the 'Text' option.\n")
+  cat(" - Save the CSV file to: ", getwd(), "/ASAP.\n")
+  cat(" - Save the entire webpage for future reference. \n")
+  cat("\n")
 
 }

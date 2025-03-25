@@ -1,4 +1,19 @@
 
+#' read.BEAST
+#'
+#' @description
+#' This function expands on the ape::read.nexus by incorporating the posterior probabilties of a phylogenetic tree generated in BEAST.
+#' The posterior probabilities are stored as node labels in the returned "phylo" object.
+#'
+#' @param file The file path to a nexus tree generated from a BEAST tree population using TreeAnnotator.
+#'
+#' @returns An object of class "phylo" with the posterior probabilities assigned to the node labels.
+#' @export
+#'
+#' @examples
+#' # Example usage of the function
+#' tree <- read.BEAST(file = "BEAST.nexus")
+#'
 read.BEAST <- function(file) {
   # Read the tree from the NEXUS file
   tree <- ape::read.nexus(file)
