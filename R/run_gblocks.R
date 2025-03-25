@@ -11,11 +11,11 @@ run_gblocks <- function(DNA_alignment_path = paste0(getwd(), "/Alignments/checke
 
   # Define Gblocks parameters based on mode
   params <- if (mode == "default") {
-    list(b1 = 0.5, b2 = 0.5, b3 = ncol(alignment_matrix), b4 = 2, b5 = "a")
+    list(b1 = 0.5, b2 = 0.85, b3 = 8, b4 = 10, b5 = "n")
   } else if (mode == "less_stringent") {
-    list(b1 = 0.5, b2 = 0.5, b3 = ncol(alignment_matrix), b4 = 5, b5 = "h")
+    list(b1 = 0.5, b2 = 0.839, b3 = 8, b4 = 5, b5 = "h")
   } else if (mode == "more_stringent") {
-    list(b1 = 0.5, b2 = 0.5, b3 = 50, b4 = 2, b5 = "n")
+    list(b1 = 0.5, b2 = 0.85, b3 = 4, b4 = 10, b5 = "n")
   } else {
     stop("Invalid mode. Choose from 'default', 'less_stringent', or 'more_stringent'.")
   }
